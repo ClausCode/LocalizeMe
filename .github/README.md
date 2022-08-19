@@ -16,7 +16,7 @@ LocalizeMe is an open source library that is a simple and convenient localizatio
 # Install
 > LocalizeMe needs Java 8 or newer in order to run.
 
-The newest version can be found [here: ![](https://jitpack.io/v/ClausCode/LocalizeMe.svg)](https://jitpack.io/#ClausCode/JustGUI)
+The newest version can be found [here: ![](https://jitpack.io/v/ClausCode/LocalizeMe.svg)](https://jitpack.io/#ClausCode/LocalizeMe)
 
 ##### Repositories
 ```groovy
