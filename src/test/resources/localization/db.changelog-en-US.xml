@@ -1,0 +1,22 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="shop.exception.InsufficientFunds" author="Claus">
+        <insert tableName="localization">
+            <column name="identifier" value="shop.exception.InsufficientFunds"/>
+            <column name="language" value="ru-RU"/>
+            <column name="value" value="У вас недостаточно средств для покупки товара :name"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="shop.success.SuccessfulPurchase" author="Claus">
+        <insert tableName="localization">
+            <column name="identifier" value="shop.success.SuccessfulPurchase"/>
+            <column name="language" value="ru-RU"/>
+            <column name="value" value="Вы успешно купили :name"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

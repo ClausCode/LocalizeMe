@@ -1,0 +1,23 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="GENERATE TABLE" author="Claus">
+        <createTable tableName="localization">
+            <column name="identifier" type="VARCHAR(256)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="language" type="VARCHAR(128)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="value" type="clob">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <!--ru-RU-->
+    <include file="classpath:liquibase/db.changelog-ru-RU.xml"/>
+</databaseChangeLog>
