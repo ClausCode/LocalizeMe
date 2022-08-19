@@ -1,6 +1,5 @@
 package com.clauscode.localization;
 
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
@@ -9,10 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
-@Entity(name = "localization")
-@RequiredArgsConstructor
+@Entity
 @Table(name = "localization")
-public class LocalizeDatabaseObject {
+public class Localization {
     @Id
     @Column(name = "identifier")
     private String identifier;
@@ -27,15 +25,19 @@ public class LocalizeDatabaseObject {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        LocalizeDatabaseObject that = (LocalizeDatabaseObject) o;
+        Localization that = (Localization) o;
         return identifier != null && Objects.equals(identifier, that.identifier);
     }
 

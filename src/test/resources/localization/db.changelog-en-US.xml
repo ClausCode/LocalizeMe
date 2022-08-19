@@ -3,19 +3,20 @@
                     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                     https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="shop.exception.InsufficientFunds" author="Claus">
+    <changeSet id="shop.exception.InsufficientFunds en-US" author="Claus">
         <insert tableName="localization">
             <column name="identifier" value="shop.exception.InsufficientFunds"/>
-            <column name="language" value="ru-RU"/>
-            <column name="value" value="У вас недостаточно средств для покупки товара :name"/>
+            <column name="language" value="en-US"/>
+            <column name="value" value="You don't have enough money to buy a :name product"/>
         </insert>
     </changeSet>
 
-    <changeSet id="shop.success.SuccessfulPurchase" author="Claus">
+
+    <changeSet id="shop.success.SuccessfulPurchase en-US" author="Claus">
         <insert tableName="localization">
             <column name="identifier" value="shop.success.SuccessfulPurchase"/>
-            <column name="language" value="ru-RU"/>
-            <column name="value" value="Вы успешно купили :name"/>
+            <column name="language" value="en-US"/>
+            <column name="value" value="You have successfully bought a :name"/>
         </insert>
     </changeSet>
 

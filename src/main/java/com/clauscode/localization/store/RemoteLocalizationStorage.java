@@ -2,6 +2,8 @@ package com.clauscode.localization.store;
 
 import com.clauscode.localization.Cache;
 import com.clauscode.localization.Localization;
+import com.clauscode.localization.factory.Factory;
+import com.clauscode.localization.factory.DefaultLocalizationFactory;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -16,29 +18,45 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class LocalizeStoreImpl {
+public class RemoteLocalizationStorage implements Storage {
     private final Cache<String, String> cache = new Cache<>(1000);
-    private final SessionFactory sessionFactory = new Configuration()
-            .addAnnotatedClass(Localization.class)
-            .buildSessionFactory();
-    private static LocalizeStoreImpl instance;
+    private final SessionFactory sessionFactory;
 
-    public static LocalizeStoreImpl getInstance() {
-        if(instance == null) {
-            instance = new LocalizeStoreImpl();
-        }
-        return instance;
-    }
+    private final String url;
+    private final String username;
+    private final String password;
 
-    private LocalizeStoreImpl() {
+    public RemoteLocalizationStorage(String driverClass, String dialectClass, String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+
         initLiquibase();
+
+        Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+        sessionFactory = new Configuration()
+                .addAnnotatedClass(Localization.class)
+                .setProperty("hibernate.connection.driver_class", driverClass)
+                .setProperty("hibernate.connection.url", url)
+                .setProperty("hibernate.connection.username", username)
+                .setProperty("hibernate.connection.password", password)
+                .setProperty("hibernate.dialect", dialectClass)
+                .setProperty("hibernate.show_sql", "false")
+                .setProperty("hibernate.current_session_context_class", "thread")
+                .buildSessionFactory();
     }
 
-    public String get(String identifier, String language) {
+    @Override
+    public Factory buildFactory(String language) {
+        return new DefaultLocalizationFactory(this, language);
+    }
+
+    public String getSingle(String identifier, String language) {
         return getGroup(language, Collections.singletonList(identifier)).get(identifier);
     }
-
     public Map<String, String> getGroup(String language, List<String> identifiers) {
         Map<String, String> resultMap = new HashMap<>();
         List<String> queryList = new ArrayList<>();
@@ -67,7 +85,7 @@ public class LocalizeStoreImpl {
         try {
             session.beginTransaction();
 
-            session.createQuery("select l from Localization l where " + idWhere + " and l.language = :language", Localization.class)
+            session.createQuery("select l from Localization l where (" + idWhere + ") and l.language = :language", Localization.class)
                     .setParameter("language", language)
                     .getResultList().forEach((obj) -> {
                         String identifier = obj.getIdentifier();
@@ -86,18 +104,16 @@ public class LocalizeStoreImpl {
 
         return resultMap;
     }
-
-    private static void initLiquibase() {
-        Liquibase liquibase = null;
+    private void initLiquibase() {
+        Liquibase liquibase;
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/catalyst_db",
-                    "root", "root"
-            );
+            connection = DriverManager.getConnection(url, username, password);
 
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
             liquibase = new Liquibase("liquibase/db.changelog-init.xml", new ClassLoaderResourceAccessor(), database);
+            liquibase.setChangeLogParameter("liquibase-logLevel", "OFF");
+            liquibase.setChangeLogParameter("liquibase.sql.logLevel", "OFF");
             liquibase.update("");
         } catch (SQLException | LiquibaseException e) {
             e.printStackTrace();

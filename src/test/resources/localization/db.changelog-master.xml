@@ -4,4 +4,6 @@
                     https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <!--ru-RU-->
     <include file="classpath:localization/db.changelog-ru-RU.xml"/>
+    <!--en-US-->
+    <include file="classpath:localization/db.changelog-en-US.xml"/>
 </databaseChangeLog>

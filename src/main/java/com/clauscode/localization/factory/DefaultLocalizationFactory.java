@@ -8,13 +8,13 @@ import com.clauscode.localization.store.Storage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LocalizationFactory implements Factory {
+public class DefaultLocalizationFactory implements Factory {
     private final Map<String, Object> properties = new HashMap<>();
 
     private final Storage storage;
     private String language;
 
-    public LocalizationFactory(Storage storage, String language) {
+    public DefaultLocalizationFactory(Storage storage, String language) {
         this.storage = storage;
         this.language = language;
     }
@@ -24,7 +24,7 @@ public class LocalizationFactory implements Factory {
         properties.put(property, value);
         return this;
     }
-    
+
     @Override
     public Factory withLanguage(String language) {
         this.language = language;
