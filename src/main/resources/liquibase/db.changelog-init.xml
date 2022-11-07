@@ -19,5 +19,5 @@
         </createTable>
     </changeSet>
     <!--ru-RU-->
-    <include file="classpath:localization/db.changelog-master.xml"/>
+    <include file="localization/db.changelog-master.xml"/>
 </databaseChangeLog>

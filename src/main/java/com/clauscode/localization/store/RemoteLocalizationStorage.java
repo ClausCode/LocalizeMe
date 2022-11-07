@@ -114,6 +114,7 @@ public class RemoteLocalizationStorage implements Storage {
             liquibase = new Liquibase("liquibase/db.changelog-init.xml", new ClassLoaderResourceAccessor(), database);
             liquibase.setChangeLogParameter("liquibase-logLevel", "OFF");
             liquibase.setChangeLogParameter("liquibase.sql.logLevel", "OFF");
+            liquibase.setChangeLogParameter("liquibase.searchPath", "/");
             liquibase.update("");
         } catch (SQLException | LiquibaseException e) {
             e.printStackTrace();
