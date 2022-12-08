@@ -1,9 +1,0 @@
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <!--ru-RU-->
-    <include file="classpath:localization/db.changelog-ru-RU.xml"/>
-    <!--en-US-->
-    <include file="classpath:localization/db.changelog-en-US.xml"/>
-</databaseChangeLog>

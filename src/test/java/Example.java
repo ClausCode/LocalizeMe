@@ -13,6 +13,8 @@ public class Example {
                 "root",
                 "root"
         );
+        storage.readFromFile("localization/ru-RU.lang", "ru-RU");
+        storage.readFromFile("localization/en-US.lang", "en-US");
         getSingle();
         getGroup();
     }
@@ -21,22 +23,18 @@ public class Example {
         Group lang = storage.buildFactory("en-US")
                 .createGroup()
                 .withString("shop.exception.InsufficientFunds")
-                .withString("shop.success.SuccessfulPurchase")
                 .withProperty("name", "Кактус")
                 .build();
 
         String messageError = lang.get("shop.exception.InsufficientFunds")
                 .build();
-        String messageSuccess = lang.get("shop.success.SuccessfulPurchase")
-                .build();
 
         System.out.println(messageError);
-        System.out.println(messageSuccess);
     }
 
     public static void getSingle() {
         String message = storage.buildFactory("ru-RU")
-                .getSingle("shop.success.SuccessfulPurchase")
+                .getSingle("shop.exception.InsufficientFunds")
                 .withProperty("name", "Кактус")
                 .build();
 

@@ -26,4 +26,5 @@ public interface Storage {
      * @param identifiers Points to a list of row IDs you need to get.
      */
     Map<String, String> getGroup(String language, List<String> identifiers);
+    void readFromFile(String path, String lang);
 }

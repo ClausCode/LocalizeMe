@@ -5,11 +5,11 @@
 
     <changeSet id="GENERATE TABLE" author="Claus">
         <createTable tableName="localization">
-            <column name="identifier" type="VARCHAR(256)">
+            <column name="identifier" type="VARCHAR(1024)">
                 <constraints nullable="false" unique="false"/>
             </column>
 
-            <column name="language" type="VARCHAR(128)">
+            <column name="language" type="VARCHAR(16)">
                 <constraints nullable="false" unique="false"/>
             </column>
 
@@ -18,6 +18,4 @@
             </column>
         </createTable>
     </changeSet>
-    <!--ru-RU-->
-    <include file="localization/db.changelog-master.xml"/>
 </databaseChangeLog>

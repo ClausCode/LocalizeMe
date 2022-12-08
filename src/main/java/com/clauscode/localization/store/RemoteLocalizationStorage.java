@@ -2,8 +2,8 @@ package com.clauscode.localization.store;
 
 import com.clauscode.localization.Cache;
 import com.clauscode.localization.Localization;
-import com.clauscode.localization.factory.Factory;
 import com.clauscode.localization.factory.DefaultLocalizationFactory;
+import com.clauscode.localization.factory.Factory;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -14,6 +14,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -22,7 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RemoteLocalizationStorage implements Storage {
-    private final Cache<String, String> cache = new Cache<>(1000);
+    private final Cache<String, String> cache = new Cache<>(1000000);
     private final SessionFactory sessionFactory;
 
     private final String url;
@@ -103,6 +106,40 @@ public class RemoteLocalizationStorage implements Storage {
         }
 
         return resultMap;
+    }
+
+    @Override
+    public void readFromFile(String path, String lang) {
+        InputStreamReader stream = new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
+        Session session = sessionFactory.getCurrentSession();
+        try (BufferedReader br = new BufferedReader(stream))
+        {
+            session.beginTransaction();
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] s = line.split("=");
+                String identifier = s[0].replaceAll("\\s","");
+                String value = s[1];
+
+                int size = session.createQuery("select l from Localization l where l.identifier = :identifier and l.language = :language", Localization.class)
+                        .setParameter("identifier", identifier)
+                        .setParameter("language", lang)
+                        .getResultList().size();
+                if(size == 0) {
+                    System.out.printf("[LocalizeMe] ADD LOCALIZATION id: %s, lang: %s%n", identifier, lang);
+                    session.createSQLQuery("insert into localization(identifier, language, value) values (:identifier, :lang, :value)")
+                            .setParameter("identifier", identifier)
+                            .setParameter("lang", lang)
+                            .setParameter("value", value)
+                            .executeUpdate();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            session.getTransaction().commit();
+        }
     }
     private void initLiquibase() {
         Liquibase liquibase;
