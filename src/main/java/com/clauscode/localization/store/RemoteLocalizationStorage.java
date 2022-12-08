@@ -118,6 +118,7 @@ public class RemoteLocalizationStorage implements Storage {
 
             String line;
             while ((line = br.readLine()) != null) {
+                if(line.isEmpty()) continue;
                 String[] s = line.split("=");
                 String identifier = s[0].replaceAll("\\s","");
                 String value = s[1];
