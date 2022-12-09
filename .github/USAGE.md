@@ -4,55 +4,19 @@
 * Initialize the storage by connecting it to your database
 * Start using LocalizeMe in your project
 
-### Create changeLog files in your resources directory:
+### Create .lang files in your resources:
 
-localization/db.changelog-master.xml
-```xml
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <!--ru-RU-->
-    <include file="classpath:localization/db.changelog-ru-RU.xml"/>
-    <!--en-US-->
-    <include file="classpath:localization/db.changelog-en-US.xml"/>
-    <!--Other-language-->
-</databaseChangeLog>
+localization/ru-RU.lang
+```lang
+shop.exception.InsufficientFunds=У вас недостаточно средств для покупки товара :name
+...
 ```
-localization/db.changelog-ru-RU.xml
-```xml
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-
-    <changeSet id="shop.exception.InsufficientFunds ru-RU" author="Claus">
-        <insert tableName="localization">
-            <column name="identifier" value="shop.exception.InsufficientFunds"/>
-            <column name="language" value="ru-RU"/>
-            <column name="value" value="У вас недостаточно средств для покупки товара :name"/>
-        </insert>
-    </changeSet>
-
-</databaseChangeLog>
+localization/en-US.lang
+```lang
+You don't have enough money to buy a :name product
+...
 ```
-localization/db.changelog-en-US.xml
-```xml
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="shop.exception.InsufficientFunds en-US" author="Claus">
-        <insert tableName="localization">
-            <column name="identifier" value="shop.exception.InsufficientFunds"/>
-            <column name="language" value="en-US"/>
-            <column name="value" value="You don't have enough money to buy a :name product"/>
-        </insert>
-    </changeSet>
-
-</databaseChangeLog>
-```
 ### Create a new storage instance
 ```java
 Storage storage = new RemoteLocalizationStorage(
@@ -62,6 +26,11 @@ Storage storage = new RemoteLocalizationStorage(
     "root", //Username
     "root" //Password
 );
+```
+### Import localization from files
+```java
+storage.readFromFile("localization/ru-RU.lang", "ru-RU");
+storage.readFromFile("localization/en-US.lang", "en-US");
 ```
 Get a factory instance with the desired language (it can be changed later)
 ```java
